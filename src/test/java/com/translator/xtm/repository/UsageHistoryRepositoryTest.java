@@ -3,57 +3,55 @@ package com.translator.xtm.repository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DataJpaTest
+@SpringBootTest
+@RunWith(SpringRunner.class)
 class UsageHistoryRepositoryTest {
 
     @Autowired
-    UsageHistoryRepository usageHistoryRepository;
-
-    @Test
-    void findByWord() {
-
-        List<UsageHistory> alaWord = usageHistoryRepository.findByWord("Ala");
-        List<UsageHistory> piesWord = usageHistoryRepository.findByWord("pies");
-
-        assertFalse(alaWord.isEmpty());
-        assertEquals(4, alaWord.size());
-        assertTrue(piesWord.isEmpty());
-    }
+    UsageHistoryDao usageHistoryDao;
 
     @Test
     void findAll() {
-        List<UsageHistory> words = (List<UsageHistory>) usageHistoryRepository.findAll();
+        List<UsageHistory> words = usageHistoryDao.findAll();
 
-        assertEquals(5, words.size());
+        assertEquals(3, words.size());
+        assertEquals("Ala", words.get(0).getWord());
+        assertEquals("ma", words.get(1).getWord());
+        assertEquals("kota", words.get(2).getWord());
+
         for (UsageHistory entity: words) {
             assertNotNull(entity.getId());
-            assertNotNull(entity.getDateOfUsage());
             assertNotNull(entity.getWord());
+            assertNotNull(entity.getRanking());
+
+            if (entity.getWord().equals("Ala")) {
+                assertEquals(4L, entity.getRanking());
+            } else if (entity.getWord().equals("kota")) {
+                assertEquals(1L, entity.getRanking());
+            } else if (entity.getWord().equals("ma")) {
+                assertEquals(3L, entity.getRanking());
+            }
         }
-    }
-
-    @Test
-    void getRanking() {
-        List<UsageHistory> ranking = usageHistoryRepository.getWordsRanking();
-
-        assertEquals("Ala", ranking.get(0).getWord());
-        assertEquals(4, ranking.get(0).getRanking());
-
     }
 
     @BeforeEach
     void prepare() {
-        usageHistoryRepository.save(new UsageHistory("Ala"));
-        usageHistoryRepository.save(new UsageHistory("Ala"));
-        usageHistoryRepository.save(new UsageHistory("Ala"));
-        usageHistoryRepository.save(new UsageHistory("Ala"));
-        usageHistoryRepository.save(new UsageHistory( "kot"));
+        usageHistoryDao.save(new UsageHistory("Ala"));
+        usageHistoryDao.save(new UsageHistory("Ala"));
+        usageHistoryDao.save(new UsageHistory("Ala"));
+        usageHistoryDao.save(new UsageHistory("Ala"));
+        usageHistoryDao.save(new UsageHistory( "kota"));
+        usageHistoryDao.save(new UsageHistory("ma"));
+        usageHistoryDao.save(new UsageHistory("ma"));
+        usageHistoryDao.save(new UsageHistory("ma"));
     }
 }
