@@ -2,11 +2,10 @@ package com.translator.xtm.service;
 
 import com.translator.xtm.repository.DictionaryRepository;
 import com.translator.xtm.repository.UsageHistory;
-import com.translator.xtm.repository.UsageHistoryRepository;
+import com.translator.xtm.repository.UsageHistoryDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
@@ -19,7 +18,7 @@ public class TranslateService {
     @Autowired
     DictionaryRepository dictionaryRepository;
     @Autowired
-    UsageHistoryRepository usageHistoryRepository;
+    UsageHistoryDao usageHistoryDao;
 
     private final String LEAVE_QUOTES_REGEX = "[^a-zA-Z \"ąĄęĘżŻźŹśŚóÓłŁńŃćĆ]";
     private final String SPECIFIC_WORD_REGEX = "\"([^\"]*)\"";
@@ -34,18 +33,16 @@ public class TranslateService {
             StringJoiner joiner = new StringJoiner(" ");
             for (String word: wordsOfSentence) {
                 if (isWordSpecific(word)) {
+                    word = word.replaceAll(PUNCTUATION_REGEX, "");
                     word = translate(word);
                 }
                 joiner.add(word);
-                usageHistoryRepository.save(new UsageHistory(word));
             }
             translation = joiner.toString();
         } else {
             translation = wordsOfSentence.stream()
                     .map(this::translate)
                     .collect(Collectors.joining(" "));
-
-            wordsOfSentence.forEach(word -> usageHistoryRepository.save(new UsageHistory(word)));
         }
         return translation;
     }
@@ -56,7 +53,7 @@ public class TranslateService {
     }
 
     public String translate(String word) {
-        word = word.replaceAll(PUNCTUATION_REGEX, "");
+        usageHistoryDao.save(new UsageHistory(word));
         if (dictionaryRepository.existsById(word)) {
             word = dictionaryRepository.findById(word);
         }

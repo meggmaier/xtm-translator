@@ -1,6 +1,7 @@
 package com.translator.xtm.service;
 
 import com.translator.xtm.repository.UsageHistory;
+import com.translator.xtm.repository.UsageHistoryDao;
 import com.translator.xtm.repository.UsageHistoryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class RankingServiceTest {
 
     @Autowired
-    UsageHistoryRepository usageHistoryRepository;
+    UsageHistoryDao usageHistoryDao;
 
     @Autowired
     RankingService rankingService;
@@ -33,10 +34,10 @@ class RankingServiceTest {
 
     @BeforeEach
     void prepare() {
-        usageHistoryRepository.save(new UsageHistory("Ala"));
-        usageHistoryRepository.save(new UsageHistory("Ala"));
-        usageHistoryRepository.save(new UsageHistory("Ala"));
-        usageHistoryRepository.save(new UsageHistory("Ala"));
-        usageHistoryRepository.save(new UsageHistory( "kot"));
+        usageHistoryDao.save(new UsageHistory("Ala"));
+        usageHistoryDao.save(new UsageHistory("Ala"));
+        usageHistoryDao.save(new UsageHistory("Ala"));
+        usageHistoryDao.save(new UsageHistory("Ala"));
+        usageHistoryDao.save(new UsageHistory( "kot"));
     }
 }

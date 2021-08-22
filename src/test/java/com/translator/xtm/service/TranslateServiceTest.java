@@ -1,7 +1,7 @@
 package com.translator.xtm.service;
 
 import com.translator.xtm.repository.UsageHistory;
-import com.translator.xtm.repository.UsageHistoryRepository;
+import com.translator.xtm.repository.UsageHistoryDao;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ class TranslateServiceTest {
     TranslateService translateService;
 
     @Autowired
-    UsageHistoryRepository usageHistoryRepository;
+    UsageHistoryDao usageHistoryDao;
 
     private final String sentence1 = "Ala ma kota.";
     private final String sentence2 = "Ala, jesteś sterem...";
@@ -37,8 +37,8 @@ class TranslateServiceTest {
         assertEquals(translation2, translateService.getTranslation(sentence2, false));
         assertEquals(translation3, translateService.getTranslation(sentence3, true));
 
-        List<UsageHistory> repo = (List<UsageHistory>) usageHistoryRepository.findAll();
-        assertEquals(10, repo.size());
+        List<UsageHistory> repo = usageHistoryDao.findAll();
+        assertEquals(9, repo.size());
     }
 
     @Test

@@ -1,7 +1,7 @@
 package com.translator.xtm.service;
 
 import com.translator.xtm.repository.UsageHistory;
-import com.translator.xtm.repository.UsageHistoryRepository;
+import com.translator.xtm.repository.UsageHistoryDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +11,9 @@ import java.util.List;
 public class RankingService {
 
     @Autowired
-    UsageHistoryRepository usageHistoryRepository;
+    UsageHistoryDao usageHistoryDao;
 
     public List<UsageHistory> getRanking() {
-        return usageHistoryRepository.getWordsRanking();
+        return usageHistoryDao.findAll();
     }
 }

@@ -1,6 +1,5 @@
 package com.translator.xtm.controller;
 
-import com.translator.xtm.service.TranslateService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
