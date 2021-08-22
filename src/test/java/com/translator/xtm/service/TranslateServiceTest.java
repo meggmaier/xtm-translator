@@ -38,7 +38,7 @@ class TranslateServiceTest {
         assertEquals(translation3, translateService.getTranslation(sentence3, true));
 
         List<UsageHistory> repo = usageHistoryDao.findAll();
-        assertEquals(9, repo.size());
+        assertEquals(8, repo.size());
     }
 
     @Test
